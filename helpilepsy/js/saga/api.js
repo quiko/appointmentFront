@@ -24,17 +24,18 @@ function* getListFromApi() {
 
 //send POST request to add new Movie
 function* InsertNewAppointment(appointment) {
+
     const response = yield fetch(addUrl, {
         method: 'POST',
         headers: {
-            Accept: 'application/json',
+            'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           Neurologist: appointment.Neurologist,
           Type: appointment.Type,
           Hour : Number(appointment.Hour),
-          Date : appointment.Date.toISOString(),
+          Date : appointment.Date,
           Remarks: appointment.Remarks
         }),
     });

@@ -4,6 +4,7 @@ import {
   FETCH_FAIL,
   ADD_APPOINTMENT,
   EDIT_APPOINTMENT,
+  FETCH_BY_ID,
   DELETE_APPOINTMENT
 } from "./actionTypes";
 
@@ -29,8 +30,23 @@ export const fetchFailAction = error =>{
 };
 
 export const addAction = appointment =>{
+    
     return {
         type : ADD_APPOINTMENT,
-        appointment
+        payload : appointment
     }
-}
+
+};
+
+/*export const fetchById = appointment =>{
+    return{
+        type : FETCH_BY_ID,
+        payload : appointment
+    }
+};
+export const editAction = updated =>{
+    return{
+        type: EDIT_APPOINTMENT,
+        payload : updated
+    }
+}*/

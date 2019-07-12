@@ -4,6 +4,7 @@ export const FETCH_FAIL = 'FETCH_FAIL';
 
 export const ADD_APPOINTMENT = 'ADD_APPOINTMENT';
 
+export const FETCH_BY_ID = 'FETCH_BY_ID';
 export const EDIT_APPOINTMENT = 'EDIT_APPOINTMENT';
 
 export const DELETE_APPOINTMENT = 'DELETE_APPOINTMENT';

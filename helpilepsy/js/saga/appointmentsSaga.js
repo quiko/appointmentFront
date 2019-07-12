@@ -15,9 +15,10 @@ export function* watchFetchList() {
     yield takeLatest(FETCH_APPOINTMENTS, fetchList);
 }
 
-function* addNewAppointment(action) {            
+function* addNewAppointment(action) { 
+    console.log('action-payload', action.payload)        
     try {
-        const result = yield Api.InsertNewAppointment(action.appointment);
+        const result = yield Api.InsertNewAppointment(action.payload);
         if (result === true) {
             yield put({ type: FETCH_APPOINTMENTS, sort: 'desc'});     
         }
@@ -25,6 +26,7 @@ function* addNewAppointment(action) {
         console.log(error)
     }
 }
-export function* watchAddAppointment() {            
+export function* watchAddAppointment() { 
+     
     yield takeLatest(ADD_APPOINTMENT, addNewAppointment);
 }

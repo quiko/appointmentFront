@@ -15,6 +15,10 @@ const appointmentsReducer = (list = [], action) => {
       return [];
     case ADD_APPOINTMENT:
       return [...list, action.appointment];
+    /*case FETCH_BY_ID:
+    return [];
+    case EDIT_APPOINTMENT:
+    return []*/
     default:
       return list; //state does not change
   }
