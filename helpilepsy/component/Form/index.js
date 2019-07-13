@@ -4,18 +4,24 @@ import { View, Text, TextInput, Picker } from "react-native";
 import { connect } from "react-redux";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import MyDatePicker from "./DatePicker";
-import { addAction } from "../../js/actions/index";
+import { addAction, editAction } from "../../js/actions/index";
 //import styles from "../../app.scss";
 
 const mapStateToProps = state => {
   return {
-    data: state.appointmentsReducer
+    data: state.appointmentsReducer,
+    initialValues : state.params !== undefined ? 
+    data.find(item => item._id === state.params.id)
+    :
+    null
+
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    AddAppointment: values => dispatch(addAction(values))
+    AddAppointment: values => dispatch(addAction(values)),
+    EditAppointment : values => dispatch(editAction(values))
   };
 };
 
@@ -74,7 +80,7 @@ class AppointmentForm extends Component {
     this.props.navigation.state.params === undefined ?
     this.props.AddAppointment(values)
     :
-    console.log('edition mode ON')
+    this.props.EditAppointment(values)
     this.props.navigation.navigate("AppointmentsList");
   }
 
