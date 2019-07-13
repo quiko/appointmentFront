@@ -1,5 +1,5 @@
-import { listUrl, addUrl } from '../constants';
-import { call, all } from 'redux-saga/effects';
+import { listUrl, addUrl, editUrl } from '../constants';
+
 
 
 function* getListFromApi() {
@@ -22,7 +22,7 @@ function* getListFromApi() {
       return list;
 }
 
-//send POST request to add new Movie
+//send POST request to add new appointment
 function* InsertNewAppointment(appointment) {
 
     const response = yield fetch(addUrl, {
@@ -39,14 +39,33 @@ function* InsertNewAppointment(appointment) {
           Remarks: appointment.Remarks
         }),
     });
-    //yield console.log(`response = ${JSON.stringify(response)}`); 
-    //return yield (response.status === 201);//true or false
      yield response.json()
      response.status === 201 ?  true : false
 }
+//send PUT request to update existing appointment
+function* updateAppointment(updated) {
+  const urlLink = `${editUrl}/${updated.id.toString()}`;    
+  const response = yield fetch(urlLink, {
+      method: 'PUT',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Neurologist: updated.Neurologist, 
+        Type: updated.Type,
+        Date : updated.Date,
+        Hour : Number(updated.Hour),
+        Remarks :updated.Remarks   
+      }),
+  });    
+  yield response.json()
+  response.status === 201 ?  true : false
+}
 export const Api = {
     getListFromApi,
-    InsertNewAppointment
+    InsertNewAppointment,
+    updateAppointment
 };
 
    

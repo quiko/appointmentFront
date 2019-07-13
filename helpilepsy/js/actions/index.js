@@ -4,8 +4,8 @@ import {
   FETCH_FAIL,
   ADD_APPOINTMENT,
   EDIT_APPOINTMENT,
-  FETCH_BY_ID,
-  DELETE_APPOINTMENT
+  EDIT_SUCCESS,
+  DELETE_APPOINTMENT, 
 } from "./actionTypes";
 
 export const fetchAction = sort =>{
@@ -14,7 +14,7 @@ export const fetchAction = sort =>{
         sort
     }
 };
-
+//Action sent by Redux-saga
 export const fetchSuccessAction = list =>{
     return {
         type : FETCH_SUCCESS,
@@ -37,16 +37,18 @@ export const addAction = appointment =>{
     }
 
 };
-
-/*export const fetchById = appointment =>{
-    return{
-        type : FETCH_BY_ID,
-        payload : appointment
-    }
-};
+//Update existing appointment
 export const editAction = updated =>{
     return{
         type: EDIT_APPOINTMENT,
         payload : updated
     }
-}*/
+};
+//Action sent by Redux-saga
+export const editSuccessAction = updated =>{
+    return{
+        type: EDIT_SUCCESS,
+        payload : updated
+    }
+};
+

@@ -1,4 +1,4 @@
-import { FETCH_APPOINTMENTS, FETCH_SUCCESS, FETCH_FAIL, ADD_APPOINTMENT } from '../actions/actionTypes';
+import { FETCH_APPOINTMENTS, FETCH_SUCCESS, FETCH_FAIL, ADD_APPOINTMENT, EDIT_SUCCESS, EDIT_APPOINTMENT } from '../actions/actionTypes';
 //Saga effects
 import { put, takeLatest } from 'redux-saga/effects';
 import { Api } from './api';
@@ -29,4 +29,18 @@ function* addNewAppointment(action) {
 export function* watchAddAppointment() { 
      
     yield takeLatest(ADD_APPOINTMENT, addNewAppointment);
+}
+
+function* updateAppointment(action) {            
+    try {
+        const result = yield Api.updateAppointment(action.updated);        
+        if (result === true) {
+            yield put({ type: EDIT_SUCCESS, updated: action.updated });     
+        }
+    } catch (error) {        
+        console.log(error)
+    }
+}
+export function* watchEditAppointment() {            
+    yield takeLatest(EDIT_APPOINTMENT, updateAppointment);
 }

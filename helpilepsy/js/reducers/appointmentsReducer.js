@@ -4,7 +4,8 @@ import {
   FETCH_FAIL,
   ADD_APPOINTMENT,
   EDIT_APPOINTMENT,
-  DELETE_APPOINTMENT
+  DELETE_APPOINTMENT,
+  EDIT_SUCCESS
 } from "../actions/actionTypes";
 
 const appointmentsReducer = (list = [], action) => {
@@ -15,12 +16,25 @@ const appointmentsReducer = (list = [], action) => {
       return [];
     case ADD_APPOINTMENT:
       return [...list, action.appointment];
-    /*case FETCH_BY_ID:
-    return [];
     case EDIT_APPOINTMENT:
-    return []*/
+    return list; // do nothing
+    case EDIT_SUCCESS:            
+        return list.map(eachAppointment =>
+            (eachAppointment.id.toString() === action.updated.id)
+                ? { ...eachAppointment, 
+                    Neurologist: action.updated.Neurologist, 
+                    Type: action.updated.Type,
+                    Date : action.updated.Date,
+                    Hour : action.updated.Hour,
+                    Remarks : action.updated.Remarks
+                }
+                : eachAppointment
+)
     default:
       return list; //state does not change
   }
 };
 export default appointmentsReducer;
+
+
+
