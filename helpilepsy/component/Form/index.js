@@ -1,8 +1,10 @@
 import { Field, reduxForm } from "redux-form";
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 import { View, Text, TextInput, Picker } from "react-native";
 import { connect } from "react-redux";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import moment from "moment";
 import MyDatePicker from "./DatePicker";
 import { addAction, editAction } from "../../js/actions/index";
 //import styles from "../../app.scss";
@@ -26,21 +28,33 @@ const mapDispatchToProps = dispatch => {
 };
 
 class AppointmentForm extends Component {
+  static propTypes = {
+    navigation: PropTypes.shape({
+      state: PropTypes.shape({
+        // Is this supose to be a string?
+        params: PropTypes.string
+      }),
+      navigate: PropTypes.func.isRequired
+    }).isRequired,
+    AddAppointment: PropTypes.func.isRequired,
+    handleSubmit: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
     this.submit = this.submit.bind(this);
   }
 
-  renderSelectDate = ({ input: { onChange, ...restInput } }) => {
-    return <MyDatePicker {...restInput} onChange={onChange} />;
+  renderSelectDate = ({ date, input: { onChange, ...restInput } }) => {
+    return <MyDatePicker {...restInput} date={date} onChange={onChange} />;
   };
 
-  renderSelect = ({ input: { onChange, ...restInput } }) => {
+  renderSelect = ({ input: { onChange, value, ...restInput } }) => {
     return (
       <Picker
+        selectedValue={value}
         {...restInput}
-        //selectedValue= {}
-        onValueChange={onChange}
+        onValueChange={itemValue => onChange(itemValue)}
       >
         {/*<Picker.item  label = "Choose a type" value ="Choose a type"/>*/}
         <Picker.Item label="First visit" value="First visit" />
@@ -51,13 +65,9 @@ class AppointmentForm extends Component {
     );
   };
 
-  renderHour = ({ input: { onChange, ...restInput } }) => {
+  renderHour = ({ input: { onChange, value, ...restInput } }) => {
     return (
-      <Picker
-        {...restInput}
-        //selectedValue= {}
-        onValueChange={onChange}
-      >
+      <Picker selectedValue={value} onValueChange={onChange} {...restInput}>
         {/*<Picker.item  label = "" value =""/>*/}
         <Picker.Item label="9" value="9" />
         <Picker.Item label="10" value="10" />
@@ -85,7 +95,7 @@ class AppointmentForm extends Component {
   }
 
   render() {
-    console.log('params',this.props.navigation.state.params)
+    console.log("params", this.props.navigation.state.params);
     return (
       <View>
         <Text>Neurologist</Text>
@@ -109,7 +119,10 @@ class AppointmentForm extends Component {
 
 export default reduxForm({
   form: "Appointment",
-  enableReinitialize : true 
+  enableReinitialize: true,
+  initialValues: {
+    Date: moment().format("YYYY-MM-DD")
+  }
 })(
   connect(
     mapStateToProps,

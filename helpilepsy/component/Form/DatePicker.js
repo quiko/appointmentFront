@@ -1,18 +1,24 @@
-import React, { Component } from 'react'
-import DatePicker from 'react-native-datepicker'
- 
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import DatePicker from "react-native-datepicker";
+
 export default class MyDatePicker extends Component {
-  constructor(props){
-    super(props)
-   
+  static propTypes = {
+    value: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired
+  };
+
+  constructor(props) {
+    super(props);
   }
- //
-  render(){
+
+  render() {
+    const { onChange, value } = this.props;
+    console.log("value", value);
     return (
       <DatePicker
-        style={{width: 200}}
-        //date={this.props.Date}
-        value ={ this.props.Date}
+        style={{ width: 200 }}
+        date={value}
         mode="date"
         placeholder="select date"
         format="YYYY-MM-DD"
@@ -22,7 +28,7 @@ export default class MyDatePicker extends Component {
         cancelBtnText="Cancel"
         customStyles={{
           dateIcon: {
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             top: 4,
             marginLeft: 0
@@ -31,12 +37,8 @@ export default class MyDatePicker extends Component {
             marginLeft: 36
           }
         }}
-        onDateChange={this.props.onChange }
+        onDateChange={date => onChange(date)}
       />
-    )
+    );
   }
 }
-
-
-
-
