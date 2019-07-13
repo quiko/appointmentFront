@@ -43,12 +43,12 @@ class AppointmentForm extends Component {
     return <MyDatePicker {...restInput} date={date} onChange={onChange} />;
   };
 
-  renderSelect = ({ input: { onChange, ...restInput } }) => {
+  renderSelect = ({ input: { onChange, value, ...restInput } }) => {
     return (
       <Picker
+        selectedValue={value}
         {...restInput}
-        //selectedValue= {}
-        onValueChange={onChange}
+        onValueChange={itemValue => onChange(itemValue)}
       >
         {/*<Picker.item  label = "Choose a type" value ="Choose a type"/>*/}
         <Picker.Item label="First visit" value="First visit" />
@@ -59,13 +59,9 @@ class AppointmentForm extends Component {
     );
   };
 
-  renderHour = ({ input: { onChange, ...restInput } }) => {
+  renderHour = ({ input: { onChange, value, ...restInput } }) => {
     return (
-      <Picker
-        {...restInput}
-        //selectedValue= {}
-        onValueChange={onChange}
-      >
+      <Picker selectedValue={value} onValueChange={onChange} {...restInput}>
         {/*<Picker.item  label = "" value =""/>*/}
         <Picker.Item label="9" value="9" />
         <Picker.Item label="10" value="10" />
