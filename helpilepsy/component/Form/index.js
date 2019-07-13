@@ -31,8 +31,8 @@ class AppointmentForm extends Component {
   static propTypes = {
     navigation: PropTypes.shape({
       state: PropTypes.shape({
-        // Is this supose to be a string?
-        params: PropTypes.string
+        
+        params: PropTypes.object
       }),
       navigate: PropTypes.func.isRequired
     }).isRequired,
