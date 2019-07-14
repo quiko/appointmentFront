@@ -1,29 +1,40 @@
 import { Field, reduxForm } from "redux-form";
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { View, Text, TextInput, Picker } from "react-native";
+import { View, Text, TextInput, Picker, Button } from "react-native";
 import { connect } from "react-redux";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import moment from "moment";
 import MyDatePicker from "./DatePicker";
 import { addAction, editAction } from "../../js/actions/index";
 //import styles from "../../app.scss";
 
-const mapStateToProps = state => {
-  return {
-    data: state.appointmentsReducer,
-    initialValues : state.params !== undefined ? 
-    data.find(item => item._id === state.params.id)
-    :
-    null
+// ownProps is the props passed to our component outside of redux
+const mapStateToProps = ({ appointmentsReducer }, ownProps) => {
+  let appointment;
 
+  if (ownProps.navigation && ownProps.navigation.state.params) {
+    appointment = appointmentsReducer.find(
+      item => item._id === ownProps.navigation.state.params.id
+    );
+  }
+
+  return {
+    initialValues: {
+      Neurologist: appointment ? appointment.Neurologist : "",
+      Date: appointment
+        ? moment(appointment.Date).format("YYYY-MM-DD")
+        : moment().format("YYYY-MM-DD"),
+      Remarks: appointment ? appointment.Remarks : "",
+      Type: "First visit" // this is a bit tricker since the data is an object not a string
+    },
+    data: appointmentsReducer
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     AddAppointment: values => dispatch(addAction(values)),
-    EditAppointment : updated => dispatch(editAction(updated))
+    EditAppointment: values => dispatch(editAction(values))
   };
 };
 
@@ -31,7 +42,6 @@ class AppointmentForm extends Component {
   static propTypes = {
     navigation: PropTypes.shape({
       state: PropTypes.shape({
-        
         params: PropTypes.object
       }),
       navigate: PropTypes.func.isRequired
@@ -86,17 +96,14 @@ class AppointmentForm extends Component {
     return <TextInput onChangeText={onChange} {...restInput} />;
   };
 
-  submit(values, updated) {
-    this.props.navigation.state.params === undefined ?
-    this.props.AddAppointment(values)
-    :
-    this.props.EditAppointment(updated)
+  submit(values) {
+    this.props.navigation.state.params === undefined
+      ? this.props.AddAppointment(values)
+      : this.props.EditAppointment(values);
     this.props.navigation.navigate("AppointmentsList");
   }
 
   render() {
-    console.log("params", this.props.navigation.state.params);
-    //console.log('initial values', this.state.initialValues )
     return (
       <View>
         <Text>Neurologist</Text>
@@ -110,23 +117,16 @@ class AppointmentForm extends Component {
         <Text>Remarks</Text>
         <Field name="Remarks" type="text" component={this.renderInput} />
 
-        <TouchableOpacity onPress={this.props.handleSubmit(this.submit)}>
-          <Text>Submit</Text>
-        </TouchableOpacity>
+        <Button onPress={this.props.handleSubmit(this.submit)} title="Submit" />
       </View>
     );
   }
 }
 
-export default reduxForm({
-  form: "Appointment",
-  enableReinitialize: true,
-  initialValues: {
-    Date: moment().format("YYYY-MM-DD")
-  }
-})(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(AppointmentForm)
-);
+// Had to change the way we were wiring up the component for initalValues to work
+const FormComponent = reduxForm({ form: "Appointment" })(AppointmentForm);
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FormComponent);
