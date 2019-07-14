@@ -23,7 +23,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     AddAppointment: values => dispatch(addAction(values)),
-    EditAppointment : values => dispatch(editAction(values))
+    EditAppointment : updated => dispatch(editAction(updated))
   };
 };
 
@@ -86,16 +86,17 @@ class AppointmentForm extends Component {
     return <TextInput onChangeText={onChange} {...restInput} />;
   };
 
-  submit(values) {
+  submit(values, updated) {
     this.props.navigation.state.params === undefined ?
     this.props.AddAppointment(values)
     :
-    this.props.EditAppointment(values)
+    this.props.EditAppointment(updated)
     this.props.navigation.navigate("AppointmentsList");
   }
 
   render() {
     console.log("params", this.props.navigation.state.params);
+    //console.log('initial values', this.state.initialValues )
     return (
       <View>
         <Text>Neurologist</Text>
