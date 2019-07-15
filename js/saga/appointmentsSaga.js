@@ -33,9 +33,9 @@ export function* watchAddAppointment() {
 
 function* updateAppointment(action) {            
     try {
-        const result = yield Api.updateAppointment(action.updated);        
+        const result = yield Api.updateAppointment(action.payload);        
         if (result === true) {
-            yield put({ type: EDIT_SUCCESS, updated: action.updated });     
+            yield put({ type: EDIT_SUCCESS, updated: action.payload });     
         }
     } catch (error) {        
         console.log(error)

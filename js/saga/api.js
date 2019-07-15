@@ -42,11 +42,12 @@ function* InsertNewAppointment(appointment) {
      yield response.json()
      response.status === 201 ?  true : false
 }
-//send PUT request to update existing appointment
+//send POST request to update existing appointment
 function* updateAppointment(updated) {
-  const urlLink = `${editUrl}/${updated.id.toString()}`;    
+  console.log('updated',updated)
+  const urlLink = `${editUrl}${updated._id}`;    
   const response = yield fetch(urlLink, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
