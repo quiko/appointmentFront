@@ -25,16 +25,17 @@ const mapStateToProps = ({ appointmentsReducer }, ownProps) => {
         ? moment(appointment.Date).format("YYYY-MM-DD")
         : moment().format("YYYY-MM-DD"),
       Remarks: appointment ? appointment.Remarks : "",
-      Type: "First visit" // this is a bit tricker since the data is an object not a string
+      Type: appointment ? appointment.Type : ""
     },
-    data: appointmentsReducer
+    data: appointmentsReducer,
+    appointment : appointment 
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     AddAppointment: values => dispatch(addAction(values)),
-    EditAppointment: values => dispatch(editAction(values))
+    EditAppointment: appointment => dispatch(editAction(appointment))
   };
 };
 
@@ -66,7 +67,6 @@ class AppointmentForm extends Component {
         {...restInput}
         onValueChange={itemValue => onChange(itemValue)}
       >
-        {/*<Picker.item  label = "Choose a type" value ="Choose a type"/>*/}
         <Picker.Item label="First visit" value="First visit" />
         <Picker.Item label="Follow up" value="Follow up" />
         <Picker.Item label="MRI" value="MRI" />
@@ -78,7 +78,6 @@ class AppointmentForm extends Component {
   renderHour = ({ input: { onChange, value, ...restInput } }) => {
     return (
       <Picker selectedValue={value} onValueChange={onChange} {...restInput}>
-        {/*<Picker.item  label = "" value =""/>*/}
         <Picker.Item label="9" value="9" />
         <Picker.Item label="10" value="10" />
         <Picker.Item label="11" value="11" />
@@ -95,11 +94,17 @@ class AppointmentForm extends Component {
   renderInput = ({ input: { onChange, ...restInput } }) => {
     return <TextInput onChangeText={onChange} {...restInput} />;
   };
-
+  
+  submitEdit =(values)=>{
+    let item = Object.assign(this.props.appointment, values);
+    this.props.EditAppointment(item)
+  }
   submit(values) {
-    this.props.navigation.state.params === undefined
-      ? this.props.AddAppointment(values)
-      : this.props.EditAppointment(values);
+    if(this.props.navigation.state.params === undefined )
+       {this.props.AddAppointment(values)}
+    else {
+      this.submitEdit(values)
+    }
     this.props.navigation.navigate("AppointmentsList");
   }
 
@@ -123,7 +128,6 @@ class AppointmentForm extends Component {
   }
 }
 
-// Had to change the way we were wiring up the component for initalValues to work
 const FormComponent = reduxForm({ form: "Appointment" })(AppointmentForm);
 
 export default connect(

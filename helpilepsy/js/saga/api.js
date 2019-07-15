@@ -44,7 +44,8 @@ function* InsertNewAppointment(appointment) {
 }
 //send POST request to update existing appointment
 function* updateAppointment(updated) {
-  const urlLink = `${editUrl}/${updated.id.toString()}`;    
+  console.log('updated',updated)
+  const urlLink = `${editUrl}${updated._id}`;    
   const response = yield fetch(urlLink, {
       method: 'POST',
       headers: {
