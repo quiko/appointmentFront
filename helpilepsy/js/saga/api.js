@@ -61,7 +61,7 @@ function* updateAppointment(updated) {
       }),
   });    
   yield response.json()
-  response.status === 201 ?  true : false
+  response.status === 200 ?  true : false
 }
 export const Api = {
     getListFromApi,
