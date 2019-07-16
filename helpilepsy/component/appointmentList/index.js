@@ -3,11 +3,7 @@ import { ScrollView, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 //import  _  from "lodash";
 import AppointmentItem from "../appointmentItem/index";
-import {
-  fetchAction,
-  fetchSuccessAction,
-  fetchFailedAction
-} from "../../js/actions/index";
+import { fetchAction } from "../../js/actions/index";
 
 const mapStateToProps = state => {
   return {
@@ -37,15 +33,8 @@ class AppointmentsList extends Component {
     }
   }
   componentDidUpdate(prevProps, prevState) {
-    for (let i; i++; i < prevProps.data) {
-      for (let j; j++; j < this.props.data) {
-        if (
-          prevProps.data.length !== this.props.data.length ||
-          prevProps.data[i] !== this.props.data[j]
-        ) {
-          this.props.onFetchAction();
-        }
-      }
+    if (prevProps.data.length !== this.props.data.length) {
+      this.props.onFetchAction();
     }
   }
 

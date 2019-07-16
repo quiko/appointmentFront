@@ -1,5 +1,6 @@
-import { listUrl, addUrl, editUrl } from "../constants";
+import { listUrl, addUrl, editUrl, deleteUrl } from "../constants";
 
+//send GET request to fetch appointments from api
 function* getListFromApi() {
   const response = yield fetch(listUrl, {
     method: "GET",
@@ -58,8 +59,22 @@ function* updateAppointment(updated) {
   yield response.json();
   return response.status === 200;
 }
+//send DELETE request to delete existing appointment
+function* deleteAppointment(deleted) {  
+  console.log('deleted',deleted)   
+  const urlLink = `${deleteUrl}${deleted}`;    
+  const response = yield fetch(urlLink, {
+      method: 'GET',
+      headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+      }
+  });
+  return yield (response.status === 200);//true or false
+}
 export const Api = {
   getListFromApi,
   InsertNewAppointment,
-  updateAppointment
+  updateAppointment,
+  deleteAppointment
 };
