@@ -51,4 +51,18 @@ export const editSuccessAction = updated =>{
         payload : updated
     }
 };
+//Delete existing appointment
+export const deleteAction = deleted => {        
+    return {
+        type: DELETE_APPOINTMENT,        
+        payload: deleted
+    }
+}
+//Action sent by Redux-saga
+export const deleteSuccessAction = (deleted) => {
+    return {
+        type: DELETE_SUCCESS,        
+        payload :deleted
+    }
+}
 
