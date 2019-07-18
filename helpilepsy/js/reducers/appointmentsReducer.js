@@ -24,7 +24,7 @@ const appointmentsReducer = (list = [], action) => {
     );
   case DELETE_APPOINTMENT:
   const filteredAppointment = list.filter(eachAppointment => {                
-  eachAppointment._id !== action.deleted;
+  eachAppointment._id !== action.payload;
 });
 return filteredAppointment;
   default:

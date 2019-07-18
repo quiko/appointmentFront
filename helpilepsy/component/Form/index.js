@@ -39,6 +39,20 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
+const validate = values => {
+  const errors = {}
+  if (!values.Neurologist) {
+    errors.Neurologist = 'Required'
+  }
+  if (!values.Date) {
+    errors.Date = 'Required'
+  } 
+  if (!values.Hour) {
+    errors.Hour = 'Required'
+  }
+  return errors
+}
+
 class AppointmentForm extends Component {
   static propTypes = {
     navigation: PropTypes.shape({
@@ -53,15 +67,23 @@ class AppointmentForm extends Component {
 
   constructor(props) {
     super(props);
+    this.state ={
+      error : {}
+    }
     this.submit = this.submit.bind(this);
   }
 
-  renderSelectDate = ({ date, input: { onChange, ...restInput } }) => {
-    return <MyDatePicker {...restInput} date={date} onChange={onChange} />;
+  renderSelectDate = ({ date, input: { onChange, ...restInput },meta: { touched, error} }) => {
+    return (
+      <View>
+    <MyDatePicker {...restInput} date={date} onChange={onChange} />
+    {/*{touched &&((error && <Text>{error}</Text>))}*/}
+    </View>
+    )
   };
 
   renderSelect = ({ input: { onChange, value, ...restInput } }) => {
-    return (
+  return(
       <Picker
         selectedValue={value}
         {...restInput}
@@ -72,12 +94,14 @@ class AppointmentForm extends Component {
         <Picker.Item label="MRI" value="MRI" />
         <Picker.Item label="EEG" value="EEG" />
       </Picker>
-    );
+  )
+   
   };
 
-  renderHour = ({ input: { onChange, value, ...restInput } }) => {
-    return (
-      <Picker selectedValue={value} onValueChange={onChange} {...restInput}>
+  renderHour = ({ input: { onChange, value, ...restInput },meta: { touched, error} }) => {
+       return( 
+         <View>
+       <Picker selectedValue={value} onValueChange={onChange} {...restInput}>
         <Picker.Item label="9" value="9" />
         <Picker.Item label="10" value="10" />
         <Picker.Item label="11" value="11" />
@@ -88,11 +112,21 @@ class AppointmentForm extends Component {
         <Picker.Item label="4" value="4" />
         <Picker.Item label="5" value="5" />
       </Picker>
-    );
+      {/*{touched &&((error && <Text>{error}</Text>))}*/}
+      </View>
+     
+       )
+  
   };
 
-  renderInput = ({ input: { onChange, ...restInput } }) => {
-    return <TextInput onChangeText={onChange} {...restInput} />;
+  renderInput = ({ input: { onChange, ...restInput },meta: { touched, error}, }) => {
+  return(
+    <View> 
+  <TextInput onChangeText={onChange} {...restInput} />
+  {touched &&
+        ((error && <Text>{error}</Text>))}
+  </View>
+  )
   };
   
   submitEdit =(values)=>{
@@ -128,7 +162,7 @@ class AppointmentForm extends Component {
   }
 }
 
-const FormComponent = reduxForm({ form: "Appointment" })(AppointmentForm);
+const FormComponent = reduxForm({ form: "Appointment", validate })(AppointmentForm);
 
 export default connect(
   mapStateToProps,

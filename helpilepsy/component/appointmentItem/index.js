@@ -46,7 +46,7 @@ class AppointmentItem extends Component {
             </View>
           </TouchableOpacity>
           <Button
-            //onPress={this.deleteAppointment(appointment._id)}
+            onPress={()=>this.deleteAppointment(appointment._id)}
             title="D"
           >
             D
