@@ -44,8 +44,8 @@ const validate = values => {
   if (!values.Neurologist) {
     errors.Neurologist = "Required";
   }
-  if (!values.Date) {
-    errors.Date = "Required";
+  if (values.Date < Date.now()) {
+    errors.Date = "Please pick a valid date";
   }
   if (!values.Hour) {
     errors.Hour = "Required";
@@ -79,10 +79,13 @@ class AppointmentForm extends Component {
     meta: { touched, error }
   }) => {
     return (
-      <View>
-        <MyDatePicker {...restInput} date={date} onChange={onChange} />
-        {/*{touched &&((error && <Text>{error}</Text>))}*/}
-      </View>
+      <MyDatePicker
+        {...restInput}
+        date={date}
+        onChange={onChange}
+        touched={touched}
+        error={error}
+      />
     );
   };
 
@@ -118,7 +121,7 @@ class AppointmentForm extends Component {
           <Picker.Item label="4" value="4" />
           <Picker.Item label="5" value="5" />
         </Picker>
-        {/*{touched &&((error && <Text>{error}</Text>))}*/}
+        {touched && (error && <Text>{error}</Text>)}
       </View>
     );
   };

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { View, Text } from 'react-native';
 import PropTypes from "prop-types";
 import DatePicker from "react-native-datepicker";
 
@@ -13,9 +14,9 @@ export default class MyDatePicker extends Component {
   }
 
   render() {
-    const { onChange, value } = this.props;
-    console.log("value", value);
+    const { onChange, value, touched, error } = this.props;
     return (
+      <View>
       <DatePicker
         style={{ width: 200 }}
         date={value}
@@ -39,6 +40,8 @@ export default class MyDatePicker extends Component {
         }}
         onDateChange={date => onChange(date)}
       />
+      {touched && (error && <Text>{error}</Text>)}
+      </View>
     );
   }
 }
