@@ -18,13 +18,13 @@ export default class MyDatePicker extends Component {
     return (
       <View>
       <DatePicker
-        style={{ width: 200 }}
+        style={{ width: "100%", marginBottom : 15 }}
         date={value}
         mode="date"
         placeholder="select date"
         format="YYYY-MM-DD"
-        minDate="2016-05-01"
-        maxDate="2020-06-01"
+        minDate="2019-05-01"
+        maxDate="2022-06-01"
         confirmBtnText="Confirm"
         cancelBtnText="Cancel"
         customStyles={{
@@ -35,12 +35,14 @@ export default class MyDatePicker extends Component {
             marginLeft: 0
           },
           dateInput: {
-            marginLeft: 36
+            marginLeft: 36,
+            borderColor : "grey",
+            
           }
         }}
         onDateChange={date => onChange(date)}
       />
-      {touched && (error && <Text>{error}</Text>)}
+      {touched && (error && <Text style={{color: "red"}}>{error}</Text>)}
       </View>
     );
   }

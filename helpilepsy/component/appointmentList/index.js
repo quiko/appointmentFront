@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { ScrollView, Text, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-//import  _  from "lodash";
 import AppointmentItem from "../appointmentItem/index";
 import { fetchAction } from "../../js/actions/index";
+import styles from '../../styles/index';
 
 const mapStateToProps = state => {
   return {
@@ -45,13 +45,10 @@ class AppointmentsList extends Component {
         maximumZoomScale={3}
         minimumZoomScale={0.2}
         keyboardDismissMode="on-drag"
+        contentContainerStyle ={ styles.scrollContainer}
       >
         <AppointmentItem navigation={this.props.navigation} />
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate("AppointmentForm")}
-        >
-          <Text>+</Text>
-        </TouchableOpacity>
+        
       </ScrollView>
     );
   }
