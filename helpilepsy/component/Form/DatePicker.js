@@ -14,9 +14,10 @@ export default class MyDatePicker extends Component {
   }
 
   render() {
-    const { onChange, value, touched, error } = this.props;
+    const { onChange, value } = this.props;
+    
     return (
-      <View>
+     
       <DatePicker
         style={{ width: "100%", marginBottom : 15 }}
         date={value}
@@ -42,8 +43,8 @@ export default class MyDatePicker extends Component {
         }}
         onDateChange={date => onChange(date)}
       />
-      {touched && (error && <Text style={{color: "red"}}>{error}</Text>)}
-      </View>
+      
+      
     );
   }
 }

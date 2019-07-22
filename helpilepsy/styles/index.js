@@ -92,5 +92,8 @@ input :{
   borderBottomColor: "grey",
   marginBottom : 15,
   
+},
+red :{
+  color : "red"
 }
 })

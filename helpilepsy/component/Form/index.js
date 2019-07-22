@@ -23,6 +23,7 @@ const mapStateToProps = ({ appointmentsReducer }, ownProps) => {
       Date: appointment
         ? moment(appointment.Date).format("YYYY-MM-DD")
         : moment().format("YYYY-MM-DD"),
+      Hour : appointment ? appointment.Hour : "",
       Remarks: appointment ? appointment.Remarks : "",
       Type: appointment ? appointment.Type : ""
     },
@@ -51,9 +52,9 @@ const validate = values => {
   let day = String(today.getDate()).padStart(2, "0");
   let month = String(today.getMonth() + 1).padStart(2, "0"); //January is 0
   let year = today.getFullYear();
-  today = year + '-' + month +'-'+ day;
+  today = year + "-" + month + "-" + day;
   //compare with Date
-  if (values.Date <  today) {
+  if (values.Date < today) {
     errors.Date = "Please pick a valid date";
   }
 
@@ -74,10 +75,6 @@ class AppointmentForm extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      error: {}
-    };
-    this.submit = this.submit.bind(this);
   }
 
   renderSelectDate = ({
@@ -86,13 +83,16 @@ class AppointmentForm extends Component {
     meta: { touched, error }
   }) => {
     return (
-      <MyDatePicker
-        {...restInput}
-        date={date}
-        onChange={onChange}
-        touched={touched}
-        error={error}
-      />
+      <View>
+        <MyDatePicker
+          {...restInput}
+          date={date}
+          onChange={onChange}
+          touched={touched}
+          error={error}
+        />
+        {touched && (error && <Text style={{ color: "red" }}>{error}</Text>)}
+      </View>
     );
   };
 
@@ -153,25 +153,31 @@ class AppointmentForm extends Component {
     let item = Object.assign(this.props.appointment, values);
     this.props.EditAppointment(item);
   };
-  submit(values) {
+  submit = values => {
     if (this.props.navigation.state.params === undefined) {
       this.props.AddAppointment(values);
     } else {
       this.submitEdit(values);
     }
     this.props.navigation.navigate("AppointmentsList");
-  }
+  };
 
   render() {
     return (
       <View style={styles.formContainer}>
-        <Text>Neurologist</Text>
+        <Text>
+          Neurologist<Text style={styles.red}>*</Text>
+        </Text>
         <Field name="Neurologist" type="text" component={this.renderInput} />
         <Text>Type</Text>
         <Field name="Type" type="select" component={this.renderSelect} />
-        <Text>Date</Text>
+        <Text>
+          Date<Text style={styles.red}>*</Text>
+        </Text>
         <Field name="Date" type="date" component={this.renderSelectDate} />
-        <Text>Time</Text>
+        <Text>
+          Time<Text style={styles.red}>*</Text>
+        </Text>
         <Field name="Hour" type="select" component={this.renderHour} />
         <Text>Remarks</Text>
         <Field name="Remarks" type="textarea" component={this.renderInput} />
