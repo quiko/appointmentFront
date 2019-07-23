@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { TouchableOpacity, View, Text, Button } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
 import { deleteAction } from "../../js/actions/index";
 import styles from "../../styles/index";
 

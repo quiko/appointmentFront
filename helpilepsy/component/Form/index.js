@@ -23,7 +23,7 @@ const mapStateToProps = ({ appointmentsReducer }, ownProps) => {
       Date: appointment
         ? moment(appointment.Date).format("YYYY-MM-DD")
         : moment().format("YYYY-MM-DD"),
-      Hour : appointment ? appointment.Hour : "",
+      Hour: appointment ? appointment.Hour : "",
       Remarks: appointment ? appointment.Remarks : "",
       Type: appointment ? appointment.Type : ""
     },
@@ -70,7 +70,8 @@ class AppointmentForm extends Component {
       navigate: PropTypes.func.isRequired
     }).isRequired,
     AddAppointment: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    input: PropTypes.object
   };
 
   constructor(props) {
@@ -104,7 +105,7 @@ class AppointmentForm extends Component {
           {...restInput}
           onValueChange={itemValue => onChange(itemValue)}
         >
-          <Picker.Item label="" />
+          <Picker.Item label="" value="" />
           <Picker.Item label="First visit" value="First visit" />
           <Picker.Item label="Follow up" value="Follow up" />
           <Picker.Item label="MRI" value="MRI" />
@@ -120,8 +121,12 @@ class AppointmentForm extends Component {
   }) => {
     return (
       <View style={styles.input}>
-        <Picker selectedValue={value} onValueChange={onChange} {...restInput}>
-          <Picker.Item label="" />
+        <Picker
+          selectedValue={value}
+          onValueChange={itemValue => onChange(itemValue)}
+          {...restInput}
+        >
+          <Picker.Item label="" value="" />
           <Picker.Item label="9 am" value="9 " />
           <Picker.Item label="10 am" value="10 " />
           <Picker.Item label="11 am " value="11 " />
@@ -192,9 +197,11 @@ class AppointmentForm extends Component {
   }
 }
 
-const FormComponent = reduxForm({ form: "Appointment", validate })(
-  AppointmentForm
-);
+const FormComponent = reduxForm({
+  form: "Appointment",
+  validate,
+  enableReinitialize: true
+})(AppointmentForm);
 
 export default connect(
   mapStateToProps,

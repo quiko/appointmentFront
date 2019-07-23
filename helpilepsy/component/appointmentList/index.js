@@ -25,13 +25,7 @@ class AppointmentsList extends Component {
   componentWillMount() {
     this.props.onFetchAction();
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    if (this.props.data === nextProps.data) {
-      return false;
-    } else {
-      return true;
-    }
-  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.data.length !== this.props.data.length) {
       this.props.onFetchAction();
