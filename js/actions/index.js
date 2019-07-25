@@ -6,6 +6,7 @@ import {
   EDIT_APPOINTMENT,
   EDIT_SUCCESS,
   DELETE_APPOINTMENT, 
+  DELETE_SUCCESS
 } from "./actionTypes";
 
 export const fetchAction = sort =>{

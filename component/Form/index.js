@@ -6,9 +6,8 @@ import { connect } from "react-redux";
 import moment from "moment";
 import MyDatePicker from "./DatePicker";
 import { addAction, editAction } from "../../js/actions/index";
-//import styles from "../../app.scss";
+import styles from "../../styles";
 
-// ownProps is the props passed to our component outside of redux
 const mapStateToProps = ({ appointmentsReducer }, ownProps) => {
   let appointment;
 
@@ -24,11 +23,12 @@ const mapStateToProps = ({ appointmentsReducer }, ownProps) => {
       Date: appointment
         ? moment(appointment.Date).format("YYYY-MM-DD")
         : moment().format("YYYY-MM-DD"),
+      Hour: appointment ? appointment.Hour : "",
       Remarks: appointment ? appointment.Remarks : "",
       Type: appointment ? appointment.Type : ""
     },
     data: appointmentsReducer,
-    appointment : appointment 
+    appointment: appointment
   };
 };
 
@@ -40,18 +40,26 @@ const mapDispatchToProps = dispatch => {
 };
 
 const validate = values => {
-  const errors = {}
+  const errors = {};
   if (!values.Neurologist) {
-    errors.Neurologist = 'Required'
+    errors.Neurologist = "Required";
   }
-  if (!values.Date) {
-    errors.Date = 'Required'
-  } 
   if (!values.Hour) {
-    errors.Hour = 'Required'
+    errors.Hour = "Required";
   }
-  return errors
-}
+  //get current date
+  let today = new Date();
+  let day = String(today.getDate()).padStart(2, "0");
+  let month = String(today.getMonth() + 1).padStart(2, "0"); //January is 0
+  let year = today.getFullYear();
+  today = year + "-" + month + "-" + day;
+  //compare with Date
+  if (values.Date < today) {
+    errors.Date = "Please pick a valid date";
+  }
+
+  return errors;
+};
 
 class AppointmentForm extends Component {
   static propTypes = {
@@ -62,107 +70,138 @@ class AppointmentForm extends Component {
       navigate: PropTypes.func.isRequired
     }).isRequired,
     AddAppointment: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    input: PropTypes.object
   };
 
   constructor(props) {
     super(props);
-    this.state ={
-      error : {}
-    }
-    this.submit = this.submit.bind(this);
   }
 
-  renderSelectDate = ({ date, input: { onChange, ...restInput },meta: { touched, error} }) => {
+  renderSelectDate = ({
+    date,
+    input: { onChange, ...restInput },
+    meta: { touched, error }
+  }) => {
     return (
       <View>
-    <MyDatePicker {...restInput} date={date} onChange={onChange} />
-    {/*{touched &&((error && <Text>{error}</Text>))}*/}
-    </View>
-    )
+        <MyDatePicker
+          {...restInput}
+          date={date}
+          onChange={onChange}
+          touched={touched}
+          error={error}
+        />
+        {touched && (error && <Text style={{ color: "red" }}>{error}</Text>)}
+      </View>
+    );
   };
 
   renderSelect = ({ input: { onChange, value, ...restInput } }) => {
-  return(
-      <Picker
-        selectedValue={value}
-        {...restInput}
-        onValueChange={itemValue => onChange(itemValue)}
-      >
-        <Picker.Item label="First visit" value="First visit" />
-        <Picker.Item label="Follow up" value="Follow up" />
-        <Picker.Item label="MRI" value="MRI" />
-        <Picker.Item label="EEG" value="EEG" />
-      </Picker>
-  )
-   
-  };
-
-  renderHour = ({ input: { onChange, value, ...restInput },meta: { touched, error} }) => {
-       return( 
-         <View>
-       <Picker selectedValue={value} onValueChange={onChange} {...restInput}>
-        <Picker.Item label="9" value="9" />
-        <Picker.Item label="10" value="10" />
-        <Picker.Item label="11" value="11" />
-        <Picker.Item label="12" value="12" />
-        <Picker.Item label="1" value="1" />
-        <Picker.Item label="2" value="2" />
-        <Picker.Item label="3" value="3" />
-        <Picker.Item label="4" value="4" />
-        <Picker.Item label="5" value="5" />
-      </Picker>
-      {/*{touched &&((error && <Text>{error}</Text>))}*/}
+    return (
+      <View style={styles.input}>
+        <Picker
+          selectedValue={value}
+          {...restInput}
+          onValueChange={itemValue => onChange(itemValue)}
+        >
+          <Picker.Item label="" value="" />
+          <Picker.Item label="First visit" value="First visit" />
+          <Picker.Item label="Follow up" value="Follow up" />
+          <Picker.Item label="MRI" value="MRI" />
+          <Picker.Item label="EEG" value="EEG" />
+        </Picker>
       </View>
-     
-       )
-  
+    );
   };
 
-  renderInput = ({ input: { onChange, ...restInput },meta: { touched, error}, }) => {
-  return(
-    <View> 
-  <TextInput onChangeText={onChange} {...restInput} />
-  {touched &&
-        ((error && <Text>{error}</Text>))}
-  </View>
-  )
+  renderHour = ({
+    input: { onChange, value, ...restInput },
+    meta: { touched, error }
+  }) => {
+    return (
+      <View style={styles.input}>
+        <Picker
+          selectedValue={value}
+          onValueChange={itemValue => onChange(itemValue)}
+          {...restInput}
+        >
+          <Picker.Item label="" value="" />
+          <Picker.Item label="9 am" value="9 " />
+          <Picker.Item label="10 am" value="10 " />
+          <Picker.Item label="11 am " value="11 " />
+          <Picker.Item label="12 am" value="12 " />
+          <Picker.Item label="1 pm" value="1 " />
+          <Picker.Item label="2 pm" value="2 " />
+          <Picker.Item label="3 pm" value="3 " />
+          <Picker.Item label="4 pm" value="4 " />
+          <Picker.Item label="5 pm" value="5 " />
+        </Picker>
+        {touched && (error && <Text style={{ color: "red" }}>{error}</Text>)}
+      </View>
+    );
   };
-  
-  submitEdit =(values)=>{
+
+  renderInput = ({
+    input: { onChange, ...restInput },
+    meta: { touched, error }
+  }) => {
+    return (
+      <View style={styles.input}>
+        <TextInput onChangeText={onChange} {...restInput} />
+        {touched && (error && <Text style={{ color: "red" }}>{error}</Text>)}
+      </View>
+    );
+  };
+
+  submitEdit = values => {
     let item = Object.assign(this.props.appointment, values);
-    this.props.EditAppointment(item)
-  }
-  submit(values) {
-    if(this.props.navigation.state.params === undefined )
-       {this.props.AddAppointment(values)}
-    else {
-      this.submitEdit(values)
+    this.props.EditAppointment(item);
+  };
+  submit = values => {
+    if (this.props.navigation.state.params === undefined) {
+      this.props.AddAppointment(values);
+    } else {
+      this.submitEdit(values);
     }
     this.props.navigation.navigate("AppointmentsList");
-  }
+  };
 
   render() {
     return (
-      <View>
-        <Text>Neurologist</Text>
+      <View style={styles.formContainer}>
+        <Text>
+          Neurologist<Text style={styles.red}>*</Text>
+        </Text>
         <Field name="Neurologist" type="text" component={this.renderInput} />
         <Text>Type</Text>
         <Field name="Type" type="select" component={this.renderSelect} />
-        <Text>Date</Text>
+        <Text>
+          Date<Text style={styles.red}>*</Text>
+        </Text>
         <Field name="Date" type="date" component={this.renderSelectDate} />
-        <Text>Hour</Text>
+        <Text>
+          Time<Text style={styles.red}>*</Text>
+        </Text>
         <Field name="Hour" type="select" component={this.renderHour} />
         <Text>Remarks</Text>
-        <Field name="Remarks" type="text" component={this.renderInput} />
+        <Field name="Remarks" type="textarea" component={this.renderInput} />
 
-        <Button onPress={this.props.handleSubmit(this.submit)} title="Submit" />
+        <Button
+          onPress={this.props.handleSubmit(this.submit)}
+          title="Submit"
+          color="#e91e63"
+        />
       </View>
     );
   }
 }
 
-const FormComponent = reduxForm({ form: "Appointment", validate })(AppointmentForm);
+const FormComponent = reduxForm({
+  form: "Appointment",
+  validate,
+  enableReinitialize: true
+})(AppointmentForm);
 
 export default connect(
   mapStateToProps,

@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { TouchableOpacity, View, Text, Button } from "react-native";
+import { TouchableOpacity, View, Text } from "react-native";
 import { deleteAction } from "../../js/actions/index";
+import styles from "../../styles/index";
 
 const mapStateToProps = state => {
   return {
-    data: state.appointmentsReducer,
-    
+    data: state.appointmentsReducer
   };
 };
 const mapDispatchToProps = dispatch => {
@@ -25,32 +25,41 @@ class AppointmentItem extends Component {
   };
 
   render() {
+   
     return this.props.data.map(appointment =>
       appointment !== undefined ? (
-        <View key={appointment._id}>
+        <View style={styles.Content} key={appointment._id}>
           <TouchableOpacity
             onPress={() =>
               this.props.navigation.navigate("AppointmentForm", {
                 id: appointment._id
               })
             }
+            style={styles.Card}
           >
-            <Text>{appointment.Neurologist}</Text>
-            <View>
-              <Text>
-                {appointment.Date.slice(0, 10)}   
-                <Text> at </Text>
-                {appointment.Hour} pm
-              </Text>
-              <Text>{appointment.Type}</Text>
+            <View style={styles.type}>
+              <Text style={styles.title}>{appointment.Neurologist}</Text>
+              <Text style={styles.Type}>{appointment.Type}</Text>
+            </View>
+            <View style={styles.date}>
+              <Text style={styles.Text}>{appointment.Date.slice(0, 10)}</Text>
+            </View>
+
+            <View style={styles.hour}>
+              <Text style={styles.Text}>{appointment.Hour}</Text>
+              { appointment.Hour < 6 ? (
+                <Text style={styles.Text}>pm</Text>
+              ) : (
+                <Text style={styles.Text}>am</Text>
+              )}
             </View>
           </TouchableOpacity>
-          <Button
-            onPress={()=>this.deleteAppointment(appointment._id)}
-            title="D"
+          <TouchableOpacity
+            onPress={() => this.deleteAppointment(appointment._id)}
+            style={styles.deleteButton}
           >
-            D
-          </Button>
+            <Text style={styles.buttonText}>x</Text>
+          </TouchableOpacity>
         </View>
       ) : null
     );
